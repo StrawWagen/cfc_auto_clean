@@ -80,7 +80,6 @@ function cfcCleanServer()
 
     -- Delete all references to non-player weapons & objects in objectsToRemoveFromServer
     for _, entityReference in pairs( ents.GetAll() ) do
-
         local removeTableContainsReference = table.HasValue( objectsToRemoveInServer, entityReference )
 
         -- Increment count and remove reference
