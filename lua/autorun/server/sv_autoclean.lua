@@ -85,7 +85,7 @@ function cfcCleanServer()
 
         -- Increment count and remove reference
         if entityIsUnheldWeapon( entityReference, allPlayerWeapons ) or removeTableContainsReference then
-            removedCount = count + 1
+            removedCount = removedCount + 1
             entityReference:Remove()
         end
     end
