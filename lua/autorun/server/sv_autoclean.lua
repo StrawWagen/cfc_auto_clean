@@ -1,36 +1,41 @@
-	CreateConVar('cfc_autoclean','500',{FCVAR_ARCHIVE, FCVAR_NOTIFY },'Autocleans the server based on seconds given')
-	
-function cfcCleanServer()
-	local player_weps = {}
-	local turrets = table.Add(ents.FindByClass("gmod_wire_turret"),ents.FindByClass("gmod_turret"))
-	local count = 0
-	--Manual fix for removing weapons held by player
-	for _ , v in pairs(player.GetHumans()) do
-		v:ChatPrint('[CFC_Autoclean] Cleaning server..')
-		--Also cleanup decals and sounds while we're here
-		v:ConCommand('r_cleardecals')
-		v:ConCommand('stopsound')
 
-		--
-		local wp = v:GetWeapons()
-		for _,m in pairs(wp) do
-			if (not table.HasValue(player_weps, m))then
-				table.insert(player_weps, m)
-			end
-		end
+local ConVarFlags = {FCVAR_ARCHIVE, FCVAR_NOTIFY}
+local DefaultCleanIntervalInSeconds = "500"	
+CreateConVar("cfc_autoclean", DefaultCleanIntervalInSeconds, ConVarFlags, "Autocleans the server based on seconds given")
+
+local BlacklistedEntityTypes = {
+	["gmod_wire_turret"] = true,
+	["gmod_turret"] = true
+}
+
+local CleanupCommands = {
+	["r_cleardecals"] = true,
+	["stopsound"] = true
+}
+
+local function runCleanupCommandsOnPlayer( ply )
+	if not IsValid( ply ) then return end
+
+	for command, _ in pairs( CleanupCommands ) do
+		ply:ConCommand( command )
 	end
-	
-	for k, v in pairs( ents.GetAll() ) do
-			if v:IsWeapon() and not (table.HasValue(player_weps,v) or (table.HasValue(turrets,v))) then
-				count = count + 1
-				v:Remove()
-			end
-	end
-	
-	MsgAll('[CFC_Autoclean] Removed ' .. tostring(count) .. ' objects.')
 end
 
-timer.Create('cfcautoclean',GetConVar('cfc_autoclean'):GetInt(),0,cfcCleanServer)
+function cfcCleanServer()
+	local removedCount = 0
+	
+	for _, entity in pairs( ents.GetAll() ) do
+		if not IsValid( entity ) then continue end
+		if (entity:IsWeapon() and IsValid( entity.Owner )) or not BlacklistedEntityTypes[entity:GetClass()] then continue end
 
-hook.Remove("cfcCleanOnLag")
-hook.Add( "APG_lagDetected", "cfcCleanOnLag", cfcCleanServer)
+		removedCount++
+		entity:Remove()
+	end
+	
+	MsgAll("[CFC_Autoclean] Removed " .. tostring( removedCount ) .. " objects.")
+end
+
+timer.Create("cfc_autoclean", GetConVar("cfc_autoclean"):GetInt(), 0, cfcCleanServer)
+
+hook.Remove("cfc_CleanOnLag")
+hook.Add("APG_lagDetected", "cfc_CleanOnLag", cfcCleanServer)
