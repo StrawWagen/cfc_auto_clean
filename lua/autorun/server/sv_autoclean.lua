@@ -13,17 +13,21 @@ local CleanupCommands = {
 	["stopsound"] = true
 }
 
-local function runCleanupCommandsOnPlayer( ply )
+local function runCleanupCommandsOnPlayers()
 	if not IsValid( ply ) then return end
 
-	for command, _ in pairs( CleanupCommands ) do
-		ply:ConCommand( command )
+	for k,v in pairs( player.GetHumans() ) do
+		for command, _ in pairs( CleanupCommands ) do
+			ply:ConCommand( command )
+		end
 	end
 end
 
 function cfcCleanServer()
 	local removedCount = 0
 	
+	runCleanupCommandsOnPlayers()
+
 	for _, entity in pairs( ents.GetAll() ) do
 		if not IsValid( entity ) then continue end
 		if (entity:IsWeapon() and IsValid( entity.Owner )) or not BlacklistedEntityTypes[entity:GetClass()] then continue end
