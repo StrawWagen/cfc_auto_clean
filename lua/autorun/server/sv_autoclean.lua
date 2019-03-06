@@ -3,97 +3,68 @@ local ConVarFlags = {FCVAR_ARCHIVE, FCVAR_NOTIFY}
 local DefaultCleanupIntervalInSeconds = '500'
 CreateConVar( 'cfc_autoclean', DefaultCleanupIntervalInSeconds, ConVarFlags, 'Autocleans the server based on seconds given')
 
--- The table object class strings to remove
-local ClassStringsToRemove = {}
-ClassStringsToRemove["gmod_wire_turret"] = true
-ClassStringsToRemove["gmod_turret"] = true
+-- The class strings to remove
+local Contraband = {}
+Contraband["gmod_wire_turret"] = true
+Contraband["gmod_turret"] = true
 
 -- The commands to run on players on cleanup
-local PlayerCleanupConsoleCommands = {}
-PlayerCleanupFunctions["r_cleardecals"] = true
-PlayerCleanupFunctions["stopsound"] = true
+local SearchProtocols = {}
+SearchProtocols["r_cleardecals"] = true
+SearchProtocols["stopsound"] = true
 
--- Get all objects of classes contained in ClassStringsToRemove
-local function getObjectsToRemoveInServer()
-    local objectsToRemoveInServer = {}
-
-    for classString, _ in pairs( ClassStringsToRemove ) do
-        local entitiesOfThisClass = ents.FindByClass( classString )
-
-        table.Add( objectsToRemoveInServer, entitiesOfThisClass )
-    end
-
-    return objectsToRemoveInServer
+local function isContraband(ent)
+    return Contraband[ent:GetClass()]
 end
 
--- Run all PlayerCleanupConsoleCommands on ply
-local function runCleanupCommandsOnPlayer(ply)
+local function searchPlayer(ply)
+    -- They got away!
     if not IsValid( ply ) then return end
 
-    for command, _ in pairs( PlayerCleanupConsoleCommands ) do
-        ply:ConCommand( command )
+    ply:ChatPrint('[CFC_Autoclean] You are being cleaned. Please remain calm.')
+    
+    for protocol, _ in pairs( SearchProtocols ) do
+        ply:ConCommand( protocol )
     end
 end
 
--- Adds weapons to existingWeapons from newWeapons that are not already there
-local function addNewWeaponsToTable(newWeapons, existingWeapons)
-    if not IsValid( newWeapons ) then return end
-    if not IsValid( existingWeapons ) then return end
-
-    -- Only add non-referenced weapons to allWeps table
-    for _, weapon in pairs( newWeapons ) do
-        local tableDoesNotHaveWeaponReference = ~table.HasValue( allPlayerWeaponsToRemove, weapon )
-
-        if tableDoesNotHaveWeaponReference then table.insert( existingWeapons, weapon ) end
-    end
-end
-
--- Checks to see if a weapons is currently "dropped" (unheld by a player)
-local function entityIsUnheldWeapon( entityReference, allPlayerWeapons )
-    if not IsValid( entityReference ) then return end
-    if not IsValid( allPlayerWeapons ) then return end
-    
-    if not entityReference:IsWeapon() then return false end
-    
-    -- Weapon is in player inventory
-    if table.HasValue( allPlayerWeapons, entityReference ) then return false end
-    
-    return true
-end
-
--- Clean server of player weapons and objects of classes in ClassStringsToRemove
-function cfcCleanServer()
-    local objectsToRemoveInServer = getObjectsToRemoveInServer()
-    local removedCount = 0
-
-    local allPlayerWeapons = {}
-
-    -- Run cleanup commands on players and get all held weapons
+local function searchAllPlayers()
     for _ , ply in pairs( player.GetHumans() ) do
-        ply:ChatPrint('[CFC_Autoclean] Cleaning server..')
-
-        runCleanupCommandsOnPlayer( ply )
-
-        local playerWeapons = ply:GetWeapons()
-        addNewWeaponsToTable( playerWeapons, allPlayerWeapons )
+        searchPlayer( ply )
     end
+end
 
-    -- Delete all references to non-player weapons & objects in objectsToRemoveFromServer
-    for _, entityReference in pairs( ents.GetAll() ) do
-        local removeTableContainsReference = table.HasValue( objectsToRemoveInServer, entityReference )
+local function isUnregisteredFirearm( ent )
+    if ent:IsWeapon() and IsValid( ent.Owner ) then return true end
+    
+    return false
+end
 
-        -- Increment count and remove reference
-        if entityIsUnheldWeapon( entityReference, allPlayerWeapons ) or removeTableContainsReference then
-            removedCount = removedCount + 1
-            entityReference:Remove()
+local function removeAllWrongdoers()
+    local justicesServed = 0
+    
+    for _, ent in pairs( ents.GetAll() ) do
+        if not IsValid( ent ) then continue end
+        
+        if isUnregisteredFirearm( ent ) or isContraband( ent ) then
+            justicesServed = justicesServed + 1
+            ent:Remove()
         end
     end
+    
+    print( '[CFC_Autoclean] Removed ' .. tostring( justicesServed ) .. ' objects.' )
+end
 
-    MsgAll('[CFC_Autoclean] Removed ' .. tostring(removedCount) .. ' objects.')
+function cfcCleanTheStreets()
+    print( '[CFC_Autoclean] Cleaning server...' )
+   
+    searchAllPlayers()
+    
+    removeAllWrongdoers()
 end
 
 -- Automatically cleanup every cfc_autoclean seconds
-timer.Create( 'cfcautoclean', GetConVar('cfc_autoclean'):GetInt(), 0, cfcCleanServer )
+timer.Create( 'cfc_autoclean_timer', GetConVar('cfc_autoclean'):GetInt(), 0, cfcCleanTheStreets )
 
-hook.Remove( "cfc_cleanOnLag" )
-hook.Add( "APG_lagDetected", "cfc_cleanOnLag", cfcCleanServer )
+hook.Remove( "CFC_CleanOnLag" )
+hook.Add( "APG_lagDetected", "CFC_CleanOnLag", cfcCleanTheStreets )
