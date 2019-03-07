@@ -1,7 +1,7 @@
 
 local ConVarFlags = {FCVAR_ARCHIVE, FCVAR_NOTIFY}
-local DefaultCleanIntervalInSeconds = "500"
-CreateConVar("cfc_autoclean", DefaultCleanIntervalInSeconds, ConVarFlags, "Autocleans the server based on seconds given")
+local DEFAULT_CLEAN_INTERVAL_IN_SECONDS = "500"
+CreateConVar("cfc_autoclean", DEFAULT_CLEAN_INTERVAL_IN_SECONDS, ConVarFlags, "Autocleans the server based on seconds given")
 
 local BlacklistedEntityTypes = {
     ["gmod_wire_turret"] = true,
