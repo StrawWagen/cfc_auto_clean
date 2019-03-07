@@ -13,6 +13,15 @@ local CleanupCommands = {
     ["stopsound"] = true
 }
 
+local function notifyPlayers( count )
+    local Message = "[CFC_Autoclean] Removed " .. tostring(count) .. "objects."
+
+    print(Message) -- and server
+    for _, ply in pairs( player.GetHumans() ) do
+        ply:ChatPrint(Message)
+    end
+end
+
 local function runCleanupCommandsOnPlayers()
     for _, ply in pairs( player.GetHumans() ) do
         for command, _ in pairs( CleanupCommands ) do
