@@ -14,7 +14,7 @@ local CleanupCommands = {
 }
 
 local function notifyPlayers( count )
-    local Message = "[CFC_Autoclean] Removed " .. tostring(count) .. "objects."
+    local message = "[CFC_Autoclean] Removed " .. tostring(count) .. "objects."
 
     print(Message) -- and server
     for _, ply in pairs( player.GetHumans() ) do
@@ -51,7 +51,7 @@ function cfcCleanServer()
     MsgAll("[CFC_Autoclean] Removed " .. tostring( removedCount ) .. " objects.")
 end
 
-timer.Create("cfc_autoclean", GetConVar("cfc_autoclean"):GetInt(), 0, cfcCleanServer)
+timer.Create("cfc_Autoclean", GetConVar("cfc_autoclean"):GetInt(), 0, cfcCleanServer)
 
 hook.Remove("cfc_CleanOnLag")
 hook.Add("APG_lagDetected", "cfc_CleanOnLag", cfcCleanServer)
