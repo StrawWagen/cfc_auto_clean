@@ -32,7 +32,7 @@ function cfcCleanServer()
         if not IsValid( entity ) then continue end
         if (entity:IsWeapon() and IsValid( entity.Owner )) or not BlacklistedEntityTypes[entity:GetClass()] then continue end
 
-        removedCount++
+        removedCount = removedCount + 1
         entity:Remove()
     end
     
