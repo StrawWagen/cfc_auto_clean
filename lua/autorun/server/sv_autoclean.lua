@@ -14,11 +14,11 @@ local CleanupCommands = {
 }
 
 local function notifyPlayers( count )
-    local message = "[CFC_Autoclean] Removed " .. tostring(count) .. "objects."
+    local message = "[CFC_Autoclean] Removed " .. tostring(count) .. " objects."
 
-    print(Message) -- and server
+    print(message) -- and server
     for _, ply in pairs( player.GetHumans() ) do
-        ply:ChatPrint(Message)
+        ply:ChatPrint(message)
     end
 end
 
@@ -48,7 +48,7 @@ function cfcCleanServer()
         entity:Remove()
     end
     
-    MsgAll("[CFC_Autoclean] Removed " .. tostring( removedCount ) .. " objects.")
+    notifyPlayers( removedCount )
 end
 
 timer.Create("cfc_Autoclean", GetConVar("cfc_autoclean"):GetInt(), 0, cfcCleanServer)
