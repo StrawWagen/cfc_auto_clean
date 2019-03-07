@@ -14,12 +14,12 @@ local CleanupCommands = {
 }
 
 local function runCleanupCommandsOnPlayers()
-    if not IsValid( ply ) then return end
-
-    for k,v in pairs( player.GetHumans() ) do
+    for _, ply in pairs( player.GetHumans() ) do
         for command, _ in pairs( CleanupCommands ) do
             ply:ConCommand( command )
         end
+
+        ply:ChatPrint("[CFC_Autoclean] Cleaning server...")
     end
 end
 
