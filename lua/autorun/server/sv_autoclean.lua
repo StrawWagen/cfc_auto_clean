@@ -3,10 +3,6 @@ local ConVarFlags = {FCVAR_ARCHIVE, FCVAR_NOTIFY}
 local DEFAULT_CLEAN_INTERVAL_IN_SECONDS = "500"
 CreateConVar("cfc_autoclean", DEFAULT_CLEAN_INTERVAL_IN_SECONDS, ConVarFlags, "Autocleans the server based on seconds given")
 
-local BlacklistedEntityTypes = {
-
-}
-
 local CleanupCommands = {
     ["r_cleardecals"] = true,
     ["stopsound"] = true
@@ -39,10 +35,9 @@ function cfcCleanServer()
     for _, entity in pairs( ents.GetAll() ) do
         if not IsValid( entity ) then continue end
 
-        local classIsBlacklisted = BlacklistedEntityTypes[entity:GetClass()]
         local isUnownedWeapon = entity:IsWeapon() and not IsValid( entity.Owner )
         
-        if classIsBlacklisted or isUnownedWeapon then 
+        if isUnownedWeapon then
             removedCount = removedCount + 1
             entity:Remove()
         end
