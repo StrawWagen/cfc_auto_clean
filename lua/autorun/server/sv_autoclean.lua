@@ -4,8 +4,7 @@ local DEFAULT_CLEAN_INTERVAL_IN_SECONDS = "500"
 CreateConVar("cfc_autoclean", DEFAULT_CLEAN_INTERVAL_IN_SECONDS, ConVarFlags, "Autocleans the server based on seconds given")
 
 local CleanupCommands = {
-    ["r_cleardecals"] = true,
-    ["stopsound"] = true
+    ["r_cleardecals"] = true
 }
 
 local function notifyPlayers( count )
