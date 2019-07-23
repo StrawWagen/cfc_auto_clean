@@ -1,5 +1,5 @@
 local cleanupCommands = {
-    ["r_cleardecals"] = true
+    "r_cleardecals"
 }
 
 local function notifyPlayer( notification )
@@ -8,8 +8,8 @@ local function notifyPlayer( notification )
     print( message )
 end
 
-net.Receive( "CFC_RunAutoClean", function() 
-    for command, _ in pairs(cleanupCommands) do
+net.Receive( "CFC_RunAutoClean", function()
+    for _, command in pairs( cleanupCommands ) do
         RunConsoleCommand( command )
     end
 end )
