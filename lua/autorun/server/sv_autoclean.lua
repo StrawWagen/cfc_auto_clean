@@ -4,11 +4,6 @@ local ConVarFlags = {FCVAR_ARCHIVE, FCVAR_NOTIFY}
 local DEFAULT_CLEAN_INTERVAL_IN_SECONDS = "500"
 CreateConVar("cfc_autoclean", DEFAULT_CLEAN_INTERVAL_IN_SECONDS, ConVarFlags, "Autocleans the server based on seconds given")
 
-local clientCleanupCommands = {
-    ["r_cleardecals"] = true,
-    ["stopsound"] = true
-}
-
 local function notifyPlayers( notification )
     local message = "[CFC_Autoclean] " .. notification
 
@@ -20,11 +15,8 @@ local function notifyPlayers( notification )
 end
 
 local function runCleanupCommandsOnPlayers()
-    for command, _ in pairs( clientCleanupCommands ) do
-        net.Start( "CFC_AutoClean_RunCommand" )
-        net.WriteString( command )
-        net.Broadcast()
-    end
+    net.Start( "CFC_RunAutoClean" )
+    net.Broadcast()
 
     notifyPlayers( "Cleaning server..." )
 end
