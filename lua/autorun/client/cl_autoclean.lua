@@ -1,5 +1,4 @@
 local cleanupCommands = {
-    ["stopsound"] = true,
     ["r_cleardecals"] = true
 }
 
