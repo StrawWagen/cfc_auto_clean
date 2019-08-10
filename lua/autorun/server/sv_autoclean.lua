@@ -1,4 +1,4 @@
-util.AddNetworkString( "CFC_AutoClean_RunCommand" )
+util.AddNetworkString( "CFC_RunAutoClean" )
 
 local ConVarFlags = {FCVAR_ARCHIVE, FCVAR_NOTIFY}
 local DEFAULT_CLEAN_INTERVAL_IN_SECONDS = "500"
