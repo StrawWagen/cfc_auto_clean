@@ -34,7 +34,7 @@ local clearingServerMessages = {
     "[CFC - AutoClean] Taking vitamins..",
     "[CFC - Antibullying] Calling moms..",
     "[CFC - Antiminge] Removing users..",
-    "[CFC - Crimial] Stealing copies of phatmania..",
+    "[CFC - Criminal] Stealing copies of phatmania..",
     "[CFC - Raincore] Soaking your builds..",
     "[CFC - Minecraftcore] removing legokidlogans minecraft e2..",
     "[CFC - Anticheat] Removing RadioJackal..",
