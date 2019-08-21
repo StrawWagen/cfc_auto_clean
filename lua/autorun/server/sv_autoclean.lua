@@ -9,11 +9,13 @@ local clientCleanupCommands = {
     ["stopsound"] = true
 }
 
-local function notifyPlayers( message )
-    print( message )
+local function notifyPlayers( message, includePrefix )
+    local prefix = "[CFC - AutoClean] "
+    local printMsg = includePrefix and prefix .. message or message
+    print( printMsg )
 
     for _, ply in pairs( player.GetHumans() ) do
-        ply:ChatPrint( message )
+        ply:ChatPrint( printMsg )
     end
 end
 
@@ -69,7 +71,7 @@ local function runCleanupCommandsOnPlayers()
 
     local notificationMsg = getClearingServerMessage()
 
-    notifyPlayers( notificationMsg )
+    notifyPlayers( notificationMsg, false )
 end
 
 local function removeUnownedWeapons()
@@ -86,8 +88,8 @@ local function removeUnownedWeapons()
         end
     end
     
-    local message = "[CFC - AutoClean] Removed " .. tostring( removedCount ) .. " objects."
-    notifyPlayers( message )
+    local message = "Removed " .. tostring( removedCount ) .. " objects."
+    notifyPlayers( message, true )
 end
 
 local function runCleanupFunctions()
