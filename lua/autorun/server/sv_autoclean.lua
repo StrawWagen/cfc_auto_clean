@@ -19,6 +19,49 @@ local function notifyPlayers( notification )
     end
 end
 
+local clearingServerMessages = {
+    "[CFC - AutoClean] Scrubbing the ethernet.."
+    "[CFC - AutoClean] Dusting the heatsinks.."
+    "[CFC - AutoClean] Applying more thermal paste.."
+    "[CFC - AutoClean] Tidying.."
+    "[CFC - AutoClean] Replacing internet juice.."
+    "[CFC - AutoClean] Washing threads.."
+    "[CFC - AutoClean] Cleaning forks.."
+    "[CFC - AutoClean] Downloading more RAM.."
+    "[CFC - AutoClean] Updating drivers.."
+    "[CFC - AutoClean] Installing more antivirus.."
+    "[CFC - AutoClean] Brushing teeth.."
+    "[CFC - AutoClean] Cleaning behind the ears.."
+    "[CFC - AutoClean] Vacuuming.."
+    "[CFC - AutoClean] Taking vitamins.."
+    "[CFC - Antibullying] Calling moms..",
+    "[CFC - Antiminge] Removing users..",
+    "[CFC - Crimial] Stealing copies of phatmania..",
+    "[CFC - Raincore] Soaking your builds..",
+    "[CFC - Minecraftcore] removing legokidlogans minecraft e2..",
+    "[CFC - Anticheat] Removing RadioJackal..",
+    "[CFC - Antispam] Removing chat..",
+    "[CFC - Antimicspam] Removing voicechat..",
+    "[CFC - Robostaff] Banning all humans..",
+    "[CFC - Spartan] Deleting boats..",
+    "[CFC - Minecraft] Commencing crash..",
+    "[CFC - Phatcore] Removing minges..",
+    "[CFC - Antiphatcore] Commencing dazzling..",
+    "[CFC - Awards] Handing MetaKnight award for having lemon cat..",
+    "[CFC - Piracy] Downloading pirated phatmania..",
+    "[CFC - Antirdm] Calling admins..",
+    "[CFC - Musiccore] Purchasing phatmania album..",
+    "[CFC - Fashion] Purchasing phatso merchandise..",
+    "[CFC - Mingecore] Spawning emitters..",
+    "[CFC - Chefcore] Burning the food..",
+    "[CFC - Chefcore] Consulting Gordon Ramsay..",
+    "[CFC - Discordmanager] Removing permissions.."
+}
+
+local function getClearingServerMessage()
+    return table.random( clearingServerMessages )
+end
+
 local function runCleanupCommandsOnPlayers()
     for command, _ in pairs( clientCleanupCommands ) do
         net.Start( "CFC_AutoClean_RunCommand" )
@@ -26,7 +69,9 @@ local function runCleanupCommandsOnPlayers()
         net.Broadcast()
     end
 
-    notifyPlayers( "Cleaning server..." )
+    notification = getClearingServerMessage()
+
+    notifyPlayers( notification )
 end
 
 local function removeUnownedWeapons()
