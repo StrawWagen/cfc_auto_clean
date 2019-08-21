@@ -59,7 +59,7 @@ local clearingServerMessages = {
 }
 
 local function getClearingServerMessage()
-    return table.random( clearingServerMessages )
+    return table.Random( clearingServerMessages )
 end
 
 local function runCleanupCommandsOnPlayers()
@@ -69,9 +69,9 @@ local function runCleanupCommandsOnPlayers()
         net.Broadcast()
     end
 
-    notification = getClearingServerMessage()
+    notificationMsg = getClearingServerMessage()
 
-    notifyPlayers( notification )
+    notifyPlayers( notificationMsg )
 end
 
 local function removeUnownedWeapons()
