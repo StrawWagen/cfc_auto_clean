@@ -69,7 +69,7 @@ local function runCleanupCommandsOnPlayers()
         net.Broadcast()
     end
 
-    notificationMsg = getClearingServerMessage()
+    local notificationMsg = getClearingServerMessage()
 
     notifyPlayers( notificationMsg )
 end
