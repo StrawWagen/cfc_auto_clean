@@ -86,7 +86,7 @@ local function removeUnownedWeapons()
         end
     end
     
-    local message = "Removed " .. tostring( removedCount ) .. " objects."
+    local message = "[CFC - AutoClean] Removed " .. tostring( removedCount ) .. " objects."
     notifyPlayers( message )
 end
 
