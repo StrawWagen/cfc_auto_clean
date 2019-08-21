@@ -9,8 +9,8 @@ local clientCleanupCommands = {
     ["stopsound"] = true
 }
 
-local function notifyPlayers( notification )
-    local message = "[CFC_Autoclean] " .. notification
+local function notifyPlayers( notificationMsg )
+    local message = notificationMsg
 
     print( message )
 
