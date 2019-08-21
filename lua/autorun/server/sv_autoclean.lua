@@ -9,9 +9,7 @@ local clientCleanupCommands = {
     ["stopsound"] = true
 }
 
-local function notifyPlayers( notificationMsg )
-    local message = notificationMsg
-
+local function notifyPlayers( message )
     print( message )
 
     for _, ply in pairs( player.GetHumans() ) do
