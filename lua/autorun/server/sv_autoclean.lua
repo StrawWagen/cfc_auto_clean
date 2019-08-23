@@ -11,6 +11,7 @@ local clientCleanupCommands = {
 
 local function notifyPlayers( message, includePrefix )
     local prefix = "[CFC - AutoClean] "
+    prefix = includePrefix ~= false and prefix or ""
     local printMsg = includePrefix and prefix .. message or message
     print( printMsg )
 
@@ -89,7 +90,7 @@ local function removeUnownedWeapons()
     end
     
     local message = "Removed " .. tostring( removedCount ) .. " objects."
-    notifyPlayers( message, true )
+    notifyPlayers( message )
 end
 
 local function runCleanupFunctions()
