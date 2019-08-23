@@ -11,8 +11,12 @@ local clientCleanupCommands = {
 
 local function notifyPlayers( message, includePrefix )
     local prefix = "[CFC - AutoClean] "
-    prefix = includePrefix ~= false and prefix or ""
-    local printMsg = includePrefix and prefix .. message or message
+    local printMsg = message
+
+    if includePrefix ~= false then
+        printMsg = prefix .. message
+    end
+    
     print( printMsg )
 
     for _, ply in pairs( player.GetHumans() ) do
