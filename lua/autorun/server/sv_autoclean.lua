@@ -1,4 +1,4 @@
-util.AddNetworkString( "CFC_AutoClean_RunCommand" )
+util.AddNetworkString( "CFC_RunAutoClean" )
 
 local ConVarFlags = {FCVAR_ARCHIVE, FCVAR_NOTIFY}
 local DEFAULT_CLEAN_INTERVAL_IN_SECONDS = "500"
@@ -68,11 +68,8 @@ local function getClearingServerMessage()
 end
 
 local function runCleanupCommandsOnPlayers()
-    for command, _ in pairs( clientCleanupCommands ) do
-        net.Start( "CFC_AutoClean_RunCommand" )
-        net.WriteString( command )
-        net.Broadcast()
-    end
+    net.Start( "CFC_RunAutoClean" )
+    net.Broadcast()
 
     local notificationMsg = getClearingServerMessage()
 

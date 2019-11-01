@@ -1,5 +1,5 @@
-local isAllowedCommand = {
-    ["r_cleardecals"] = true
+local cleanupCommands = {
+    "r_cleardecals"
 }
 
 local function notifyPlayer( notification )
@@ -8,11 +8,8 @@ local function notifyPlayer( notification )
     print( message )
 end
 
-net.Receive( "CFC_AutoClean_RunCommand", function()
-    local command = net.ReadString()
-
-    if isAllowedCommand[command] then
-        notifyPlayer( "The server is running '" .. command .. "' on your client.." )
+net.Receive( "CFC_RunAutoClean", function()
+    for _, command in pairs( cleanupCommands ) do
         RunConsoleCommand( command )
     end
 end )
