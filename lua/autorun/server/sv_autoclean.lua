@@ -61,6 +61,8 @@ local clearingServerMessages = {
     "[CFC - Chefcore] Burning the food...",
     "[CFC - Chefcore] Consulting Gordon Ramsay...",
     "[CFC - Discordmanager] Removing permissions..."
+    "[CFC - Fallcore] Reducing the amount of fall damage you can take by crouching and looking down before impacting a surface..."
+
 }
 
 local function getClearingServerMessage()
