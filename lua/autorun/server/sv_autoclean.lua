@@ -49,6 +49,8 @@ local function getClearingServerMessage()
 end
 
 local function runCleanupCommandsOnPlayers()
+    local notificationMsg = getClearingServerMessage()
+
     net.Start( "CFC_RunAutoClean" )
         net.WriteString( notificationMsg )
     net.Broadcast()
